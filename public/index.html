@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Phasmo Guess</title>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<style>
+body{
+ background:transparent;
+ color:white;
+ font-family:Arial;
+}
+
+.card{
+ background:rgba(0,0,0,0.7);
+ padding:15px;
+ width:400px;
+ border-radius:10px;
+}
+
+li{
+ margin:4px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>👻 Pronostics Phasmophobia</h2>
+<ul id="list"></ul>
+</div>
+
+<script>
+const socket = io();
+
+socket.on("votes",(votes)=>{
+
+ const totals = {};
+
+ Object.values(votes).forEach(g=>{
+   totals[g] = (totals[g] || 0) + 1;
+ });
+
+ document.getElementById("list").innerHTML =
+ Object.entries(totals)
+ .sort((a,b)=>b[1]-a[1])
+ .map(v=>`<li>${v[0]} : ${v[1]} votes</li>`)
+ .join("");
+
+});
+</script>
+
+</body>
+</html>
